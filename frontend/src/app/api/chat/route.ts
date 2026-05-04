@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { askWeatherAgent } from "../../../lib/agent/weather-agent";
-import { logger } from "../../../lib/logger/logger";
+import { askWeatherAgent } from "../../../features/agent/weather-agent";
+import { logger } from "../../../shared/logger/logger";
 
 //ponte entre interface visual do chat e Agent(LangChain/OpenAI)
 //cria endpoint interno   POST /api/chat

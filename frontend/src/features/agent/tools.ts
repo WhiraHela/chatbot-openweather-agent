@@ -1,7 +1,7 @@
 import { tool } from "@langchain/core/tools";
 import { z } from "zod"; //definir e validar formatos de dados
-import { fetchBackend } from "./api_client";
-import { logger } from "../logger/logger";
+import { fetchBackend } from "../services/api_client";
+import { logger } from "../../shared/logger/logger";
 
 
 // O QUE CADA TOOL FAZ

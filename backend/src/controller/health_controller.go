@@ -4,7 +4,7 @@ package controller
 
 import (
 	"net/http" //pacote que fornece implemetacoes cliente e servidor HTTP
-	appLogger "web-service-gin/src/infrastructure/logger"
+	appLogger "web-service-gin/src/logger"
 	"github.com/gin-gonic/gin" //framework HTTP para Go (aplicacoes web, APIs REST, microservicos)
 )
 

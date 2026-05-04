@@ -8,8 +8,8 @@ import (
 	"strconv"
 
 	"web-service-gin/src/config"
-	appLogger "web-service-gin/src/infrastructure/logger"
-	"web-service-gin/src/infrastructure/service"
+	appLogger "web-service-gin/src/logger"
+	"web-service-gin/src/service"
 
 	"github.com/gin-gonic/gin"
 )

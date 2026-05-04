@@ -10,8 +10,9 @@ import (
 	"time"
 
 	"web-service-gin/src/config"
-	appLogger "web-service-gin/src/infrastructure/logger"
-	"web-service-gin/src/infrastructure/model"
+	appLogger "web-service-gin/src/logger"
+	"web-service-gin/src/mapper"
+	"web-service-gin/src/model"
 )
 
 // WeatherError representa um erro tratado da camada de service.
@@ -118,36 +119,8 @@ func GetCurrentWeather(cfg config.Config, city string) (model.WeatherToolRespons
 		}
 	}
 
-	// retorna weather como array - so acessamos o primeiro item se ele existir
-	description := ""
-	if len(openWeather.Weather) > 0 {
-		description = openWeather.Weather[0].Description
-	}
-
-	// monta resposta limpa para o agent
-	response := model.WeatherToolResponse{
-		Type:        "current_weather",
-		City:        openWeather.Name,
-		Country:     openWeather.Sys.Country,
-		Temperature: openWeather.Main.Temp,
-		FeelsLike:   openWeather.Main.FeelsLike,
-		TempMin:     openWeather.Main.TempMin,
-		TempMax:     openWeather.Main.TempMax,
-		Humidity:    openWeather.Main.Humidity,
-		Pressure:    openWeather.Main.Pressure,
-		Description: description,
-		WindSpeed:   openWeather.Wind.Speed,
-		Clouds:      openWeather.Clouds.All,
-		Visibility:  openWeather.Visibility,
-	}
-
-	// responseJSON, err := json.MarshalIndent(response, "", " ")
-	// 	if err != nil {
-	// 		appLogger.Error("Erro ao converter resposta forecast para JSON: " + err.Error())
-	// 	} else {
-	// 		appLogger.Info("JSON limpo retornado para a tool: " + string(responseJSON))
-	// }
-
+	// transforma o JSON bruto da OpenWeather em JSON limpo para o agent/frontend
+	response := mapper.ToWeatherToolResponse(openWeather)
 	appLogger.Info("Resposta de clima atual montada com sucesso para cidade: " + response.City)
 
 	return response, nil

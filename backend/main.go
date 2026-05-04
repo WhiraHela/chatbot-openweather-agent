@@ -1,10 +1,10 @@
 package main
 
 import (
-	appLogger "web-service-gin/src/infrastructure/logger"
+	appLogger "web-service-gin/src/logger"
 
 	"web-service-gin/src/config"
-	"web-service-gin/src/infrastructure/controller"
+	"web-service-gin/src/controller"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,4 +1,4 @@
-import { WeatherChat } from "../components/chat/weather_chat";
+import { WeatherChat } from "../features/weather-chat/components/weather_chat";
 
 //define a interface de uma rota (representa rota inicial /src/app)
 export default function Home() {

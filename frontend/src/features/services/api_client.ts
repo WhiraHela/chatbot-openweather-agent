@@ -1,4 +1,4 @@
-import { logger } from "../logger/logger";
+import { logger } from "../../shared/logger/logger";
 
 // 1. Recebe endpoint
 // 2. Monta url completa
