@@ -1,6 +1,6 @@
 // Responde /health
 
-package service
+package controller
 
 import (
 	"net/http" //pacote que fornece implemetacoes cliente e servidor HTTP

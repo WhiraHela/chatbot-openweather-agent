@@ -1,25 +1,9 @@
-// Define estrutura/modelo para current weather
+// Define estrutura/modelo para o JSON bruto de current weather da OpenWeather.
 
 package model
 
-//JSON limpo que a nossa API devolve para a tool do agent
-type WeatherToolResponse struct {
-	Type        string  `json:"type"`
-	City        string  `json:"city"`
-	Country     string  `json:"country"`
-	Temperature float64 `json:"temperature"`
-	FeelsLike   float64 `json:"feels_like"`
-	TempMin     float64 `json:"temp_min"`
-	TempMax     float64 `json:"temp_max"`
-	Humidity    int     `json:"humidity"`
-	Pressure    int     `json:"pressure"`
-	Description string  `json:"description"`
-	WindSpeed   float64 `json:"wind_speed"`
-	Clouds      int     `json:"clouds"`
-	Visibility  int     `json:"visibility"`
-}
-
-//JSON bruto da Openweather
+// OpenWeatherResponse representa o JSON bruto retornado pela OpenWeather
+// no endpoint de clima atual.
 type OpenWeatherResponse struct {
 	Name string `json:"name"`
 

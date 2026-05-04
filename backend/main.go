@@ -4,7 +4,7 @@ import (
 	appLogger "web-service-gin/src/infrastructure/logger"
 
 	"web-service-gin/src/config"
-	"web-service-gin/src/infrastructure/service"
+	"web-service-gin/src/infrastructure/controller"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,9 +23,9 @@ func main() {
 	router := gin.Default()
 
 	//registrando rotas
-	router.GET("/health", service.HealthCheck)
-	router.GET("/weather", service.GetWeather(cfg))
-	router.GET("/forecast", service.GetForecast(cfg))
+	router.GET("/health", controller.HealthCheck)
+	router.GET("/weather", controller.GetWeather(cfg))
+	router.GET("/forecast", controller.GetForecast(cfg))
 
 	appLogger.Info("Rotas registradas: /health, /weather, /forecast")
 	appLogger.Info("Servidor rodando em http://" + cfg.ServerAddress)
