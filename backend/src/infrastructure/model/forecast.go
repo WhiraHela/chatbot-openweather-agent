@@ -1,17 +1,20 @@
 // Define estrutura/modelo para forecast weather
 
-package models
+package model
 
+
+//JSON limpo que a nossa API devolve para a tool do agent
 type ForecastToolResponse struct {
-	Type          string         `json:"type"`
-	City          string         `json:"city"`
-	Country       string         `json:"country"`
-	DaysRequested int            `json:"days_requested"`
-	Items         []ForecastItem `json:"items"`
+	Type          string         `json:"type"` 				//tipo daresposta
+	City          string         `json:"city"` 				// nome da cidade retornada pelo OpenWeather
+	Country       string         `json:"country"` 			//país
+	DaysRequested int            `json:"days_requested"` 	//quantidades de dias solicitados
+	Items         []ForecastItem `json:"items"` 			// lista de previsoes em intervalos de 3 horas
 }
 
+// Representa cada item individual da previsao
 type ForecastItem struct {
-	DateTime         string  `json:"date_time"`
+	DateTime         string  `json:"date_time"` 
 	Temperature     float64 `json:"temperature"`
 	FeelsLike       float64 `json:"feels_like"`
 	TempMin         float64 `json:"temp_min"`
@@ -24,6 +27,8 @@ type ForecastItem struct {
 	Clouds          int     `json:"clouds"`
 }
 
+
+//JSON bruto da Openweather
 type OpenWeatherForecastResponse struct {
 	Cod     string `json:"cod"`
 	Message int    `json:"message"`

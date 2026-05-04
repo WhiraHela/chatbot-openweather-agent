@@ -1,7 +1,8 @@
 // Define estrutura/modelo para current weather
 
-package models
+package model
 
+//JSON limpo que a nossa API devolve para a tool do agent
 type WeatherToolResponse struct {
 	Type        string  `json:"type"`
 	City        string  `json:"city"`
@@ -18,6 +19,7 @@ type WeatherToolResponse struct {
 	Visibility  int     `json:"visibility"`
 }
 
+//JSON bruto da Openweather
 type OpenWeatherResponse struct {
 	Name string `json:"name"`
 
