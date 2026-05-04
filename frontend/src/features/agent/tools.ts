@@ -1,6 +1,6 @@
 import { tool } from "@langchain/core/tools";
 import { z } from "zod"; //definir e validar formatos de dados
-import { fetchBackend } from "../services/api_client";
+import { fetchBackend } from "../weather-chat/services/backendClient";
 import { logger } from "../../shared/logger/logger";
 
 

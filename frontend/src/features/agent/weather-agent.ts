@@ -4,7 +4,6 @@ import { weatherTools } from "./tools";
 
 
 
-
 const model = new ChatOpenAI({
     model: "gpt-4o-mini",
     temperature: 0.2, //resposta mais controlada e menos criativa, mais precisao para agent de clima
