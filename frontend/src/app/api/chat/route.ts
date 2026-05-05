@@ -1,58 +1,92 @@
 import { NextRequest, NextResponse } from "next/server";
 import { askWeatherAgent } from "../../../features/agent/weatherAgent";
 import { logger } from "../../../shared/logger/logger";
+import { AppError, isAppError } from "../../../features/weather-chat/types/appError";
 
-//ponte entre interface visual do chat e Agent(LangChain/OpenAI)
-//cria endpoint interno   POST /api/chat
-
-//funcao para responder requisicoes POST para /api/chat -> para Next.js conseguir usar como rota
-export async function POST(req: NextRequest) { //disponibilizando funcao para Next.js exergar e usar
-// uso de async pois outras funcionalidades (ler body da req, gravar log, chamar agent...) nao sao instantaneas - precisa esperar o Promisse dessas outras tarefas 
+export async function POST(req: NextRequest) {
     try {
         const openaiApiKey = process.env.OPENAI_API_KEY;
+
         if (!openaiApiKey) {
             await logger.error("OPENAI_API_KEY não configurada no ambiente");
 
             return NextResponse.json(
-                { error: "Configure uma chave de API válida da OpenAI." },
+                {
+                    error: true,
+                    code: "OPENAI_API_KEY_MISSING",
+                    message: "Configure uma chave de API válida da OpenAI.",
+                },
                 { status: 500 }
             );
         }
 
-        const body = await req.json(); //leitura do json req - converte para obj javascript
+        const body = await req.json();
+        const message = body?.message;
 
-        const message = body?.message; //se body existir, pegue body message
-
-        
         if (!message || typeof message !== "string") {
             await logger.warning("Requisição /api/chat sem mensagem válida");
 
             return NextResponse.json(
-                { error: "Mensagem obrigatória." },
+                {
+                    error: true,
+                    code: "MESSAGE_REQUIRED",
+                    message: "Mensagem obrigatória.",
+                },
                 { status: 400 }
             );
         }
 
         await logger.info(`Mensagem recebida em /api/chat: ${message}`);
 
-        //guarda resposta para msg enviada pelo usr
         const answer = await askWeatherAgent(message);
+
         await logger.info(`Resposta retornada por /api/chat: ${answer}`);
 
-        //retorna resposta para msg enviada pelo usr
-        return NextResponse.json({
-            answer,
-        });
+        return NextResponse.json(
+            {
+                answer,
+            },
+            { status: 200 }
+        );
     } catch (error) {
+        if (isAppError(error)) {
+            await logger.error(
+                `Erro controlado em /api/chat. Status: ${error.status}, code: ${error.code}, message: ${
+                    error.technicalMessage || error.userMessage
+                }`
+            );
+
+            return NextResponse.json(
+                {
+                    error: true,
+                    code: error.code,
+                    message: error.userMessage,
+                },
+                { status: error.status }
+            );
+        }
+
         await logger.error(
             `Erro em /api/chat: ${
                 error instanceof Error ? error.message : String(error)
             }`
         );
 
+        const unknownError = new AppError({
+            code: "UNKNOWN_ERROR",
+            status: 500,
+            userMessage: "Erro interno ao processar mensagem.",
+            technicalMessage:
+                error instanceof Error ? error.message : String(error),
+        });
+
         return NextResponse.json(
-            { error: "Erro interno ao processar mensagem." },
-            { status: 500 }
+            {
+                error: true,
+                code: unknownError.code,
+                message: unknownError.userMessage,
+            },
+            { status: unknownError.status }
         );
     }
 }

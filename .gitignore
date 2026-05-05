@@ -8,6 +8,11 @@ frontend/.env
 frontend/.env.local
 frontend/.env.*.local
 
+# Permite arquivos de exemplo
+!.env.example
+!backend/.env.example
+!frontend/.env.local.example
+
 # Logs
 logs/
 backend/logs/

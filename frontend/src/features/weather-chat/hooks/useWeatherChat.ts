@@ -55,19 +55,16 @@ export function useWeatherChat() {
         try {
             const data = await sendChatMessage(userMessage);
 
-            // Adiciona a resposta do assistente.
             setMessages((prev) => [
                 ...prev,
                 {
                     role: "assistant",
-                    content:
-                        data.answer ||
-                        data.error ||
-                        "Não foi possível processar sua mensagem.",
+                    content: data.ok ? data.answer : data.message,
                 },
             ]);
+
         } catch {
-            // Erro de rede ou falha inesperada no fetch.
+            // Erro inesperado que escapou do chatApi.
             setMessages((prev) => [
                 ...prev,
                 {
