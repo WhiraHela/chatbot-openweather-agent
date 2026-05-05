@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { askWeatherAgent } from "../../../features/agent/weather-agent";
+import { askWeatherAgent } from "../../../features/agent/weatherAgent";
 import { logger } from "../../../shared/logger/logger";
 
 //ponte entre interface visual do chat e Agent(LangChain/OpenAI)
@@ -9,6 +9,16 @@ import { logger } from "../../../shared/logger/logger";
 export async function POST(req: NextRequest) { //disponibilizando funcao para Next.js exergar e usar
 // uso de async pois outras funcionalidades (ler body da req, gravar log, chamar agent...) nao sao instantaneas - precisa esperar o Promisse dessas outras tarefas 
     try {
+        const openaiApiKey = process.env.OPENAI_API_KEY;
+        if (!openaiApiKey) {
+            await logger.error("OPENAI_API_KEY não configurada no ambiente");
+
+            return NextResponse.json(
+                { error: "Configure uma chave de API válida da OpenAI." },
+                { status: 500 }
+            );
+        }
+
         const body = await req.json(); //leitura do json req - converte para obj javascript
 
         const message = body?.message; //se body existir, pegue body message
