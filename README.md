@@ -8,9 +8,11 @@ Exemplos de perguntas:
 Qual o clima atual em São Paulo?
 Vai chover amanhã em Ribeirão Preto?
 Como estará o tempo nos próximos 3 dias em Curitiba?
-````
+```
 
 Usei LangChain porque ele facilita a criação de Agents com tools. Nesse projeto, o Agent decide se deve buscar clima atual ou previsão futura, chama a ferramenta correta e usa o backend como fonte dos dados. Também escolhi LangChain por já ter experiência prévia com a ferramenta, o que ajudou na organização do fluxo entre LLM, tools e backend.
+
+
 
 ## Tecnologias
 
@@ -32,6 +34,8 @@ Usei LangChain porque ele facilita a criação de Agents com tools. Nesse projet
 * OpenAI API
 * Zod
 
+
+
 ## Como rodar localmente
 
 ### Pré-requisitos
@@ -40,6 +44,8 @@ Usei LangChain porque ele facilita a criação de Agents com tools. Nesse projet
 * Node.js + npm
 * Chave da OpenWeather
 * Chave da OpenAI
+
+
 
 ## Configuração do backend
 
@@ -64,6 +70,8 @@ OPENWEATHER_FORECAST_URL=https://api.openweathermap.org/data/2.5/forecast
 SERVER_ADDRESS=localhost:8080
 ```
 
+
+
 ## Configuração do frontend
 
 Entre na pasta do frontend:
@@ -86,6 +94,8 @@ OPENAI_API_KEY=SUA_CHAVE_DA_OPENAI
 AGENT_LOG_DIR=logs
 ```
 
+
+
 ## Rodando o backend
 
 ```bash
@@ -99,6 +109,8 @@ Servidor esperado:
 ```txt
 http://localhost:8080
 ```
+
+
 
 ## Rodando o frontend
 
@@ -115,6 +127,8 @@ Acesse:
 ```txt
 http://localhost:3000
 ```
+
+
 
 ## Endpoints do backend
 
@@ -137,6 +151,8 @@ curl "http://localhost:8080/weather?city=Sao%20Paulo"
 ```bash
 curl "http://localhost:8080/forecast?city=Sao%20Paulo&days=3"
 ```
+
+
 
 ## Rota interna do frontend
 
@@ -172,6 +188,8 @@ Resposta de erro:
 }
 ```
 
+
+
 ## Fluxo básico
 
 ```txt
@@ -196,6 +214,8 @@ Agent gera resposta final
 Chat exibe a resposta
 ```
 
+
+
 ## Logs
 
 ```txt
@@ -204,6 +224,8 @@ frontend/logs
 ```
 
 Os logs registram chamadas, erros controlados, falhas externas e respostas processadas.
+
+
 
 ## Tratamento de erros
 
@@ -222,6 +244,8 @@ Erros reais retornam status HTTP adequado, por exemplo:
 * `502` para erro na OpenWeather
 * `503` para backend indisponível
 
+
+
 ## Plano de testes
 
 No navegador, abra:
@@ -238,22 +262,25 @@ Payload → mensagem enviada
 Response → JSON retornado
 ```
 
+
+
 ## Testes funcionais e de erro
 
-| Teste                        | Entrada/configuração              | Status esperado | Resposta esperada                   |
-| ---------------------------- | --------------------------------- | --------------: | ----------------------------------- |
-| Health check                 | `GET /health`                     |             200 | API rodando                         |
-| Clima atual válido           | `qual o clima atual em sao paulo` |             200 | `answer`                            |
-| Forecast válido              | `vai chover amanhã em sao paulo?` |             200 | `answer`                            |
+| Teste                        | Entrada/configuração               | Status esperado | Resposta esperada                    |
+| ---------------------------- | ------------------------------------ | --------------: | ------------------------------------ |
+| Health check                 | `GET /health`                      |             200 | API rodando                          |
+| Clima atual válido          | `qual o clima atual em sao paulo`  |             200 | `answer`                           |
+| Forecast válido             | `vai chover amanhã em sao paulo?` |             200 | `answer`                           |
 | Fora do escopo               | `quem é o presidente do brasil?`  |             200 | Agent informa que só responde clima |
-| Sem cidade                   | `qual o clima atual?`             |             200 | Agent pede a cidade                 |
-| Cidade inexistente           | `qual o clima em xyzabczzzz?`     |             404 | `CITY_NOT_FOUND`                    |
-| Backend desligado            | parar backend e perguntar clima   |             503 | `BACKEND_UNAVAILABLE`               |
-| OpenWeather key ausente      | `OPENWEATHER_API_KEY=`            |             500 | `WEATHER_SERVICE_CONFIG_ERROR`      |
-| OpenWeather key inválida     | chave inválida no backend         |             502 | `WEATHER_SERVICE_UNAVAILABLE`       |
-| URL da OpenWeather ausente   | URL vazia no backend              |             500 | `WEATHER_SERVICE_CONFIG_ERROR`      |
-| URL da OpenWeather incorreta | path incorreto na URL             |             502 | `WEATHER_SERVICE_UNAVAILABLE`       |
-| OpenAI key ausente           | `OPENAI_API_KEY=`                 |             500 | `OPENAI_API_KEY_MISSING`            |
+| Sem cidade                   | `qual o clima atual?`              |             200 | Agent pede a cidade                  |
+| Cidade inexistente           | `qual o clima em xyzabczzzz?`      |             404 | `CITY_NOT_FOUND`                   |
+| Backend desligado            | parar backend e perguntar clima      |             503 | `BACKEND_UNAVAILABLE`              |
+| OpenWeather key ausente      | `OPENWEATHER_API_KEY=`             |             500 | `WEATHER_SERVICE_CONFIG_ERROR`     |
+| OpenWeather key inválida    | chave inválida no backend           |             502 | `WEATHER_SERVICE_UNAVAILABLE`      |
+| URL da OpenWeather incorreta | path incorreto na URL                |             502 | `WEATHER_SERVICE_UNAVAILABLE`      |
+| OpenAI key ausente           | `OPENAI_API_KEY=`                  |             500 | `OPENAI_API_KEY_MISSING`           |
+
+
 
 ## Testes com curl
 
@@ -275,25 +302,7 @@ curl -i "http://localhost:8080/forecast?city=Sao%20Paulo&days=3"
 curl -i "http://localhost:8080/weather?city=xyzabczzzz"
 ```
 
-### Frontend
 
-```bash
-curl -i -X POST "http://localhost:3000/api/chat" \
-  -H "Content-Type: application/json" \
-  -d '{"message":"qual o clima atual em sao paulo"}'
-```
-
-```bash
-curl -i -X POST "http://localhost:3000/api/chat" \
-  -H "Content-Type: application/json" \
-  -d '{"message":"vai chover amanhã em sao paulo?"}'
-```
-
-```bash
-curl -i -X POST "http://localhost:3000/api/chat" \
-  -H "Content-Type: application/json" \
-  -d '{}'
-```
 
 ## Testes de responsividade
 
@@ -308,7 +317,7 @@ Tamanhos sugeridos:
 | Tipo           |     Tamanho |
 | -------------- | ----------: |
 | Mobile pequeno |   360 x 640 |
-| Mobile médio   |   390 x 844 |
+| Mobile médio  |   390 x 844 |
 | Tablet         |  768 x 1024 |
 | Notebook       |  1366 x 768 |
 | Desktop        | 1920 x 1080 |
@@ -320,8 +329,6 @@ Checklist:
 [ ] O input fica visível.
 [ ] O botão de enviar não fica cortado.
 [ ] Mensagens longas quebram linha corretamente.
-[ ] A última mensagem aparece acima do input.
-[ ] O indicador de pensamento não quebra o layout.
 [ ] A tela inicial fica centralizada.
 [ ] Em desktop, o chat não fica largo demais.
 ```
@@ -338,6 +345,8 @@ Esperado:
 false
 ```
 
+
+
 ## Decisões técnicas
 
 O backend foi separado do frontend para deixar a aplicação mais próxima de um cenário fullstack real. O Go/Gin ficou responsável por consultar a OpenWeather e devolver dados limpos. O Next.js ficou responsável pela interface, pela rota `/api/chat` e pela integração com o Agent.
@@ -346,12 +355,16 @@ O LangChain foi escolhido para organizar o Agent e as tools. Ele adiciona comple
 
 O tratamento de erro foi separado da resposta conversacional. Isso evita que erro técnico, como OpenWeather fora do ar ou chave ausente, vire uma resposta normal do chat com status `200`.
 
+
+
 ## Trade-offs
 
 * Usar LangChain facilita o Agent, mas adiciona uma camada a mais de abstração.
 * Separar backend e frontend melhora a organização, mas exige rodar dois serviços localmente.
 * Ter logger próprio ajuda no entendimento do fluxo, mas em produção eu usaria uma solução mais robusta.
 * Tratar erro fora da resposta da LLM deixa o sistema mais confiável, mas exige mais código de controle.
+
+
 
 ## O que eu faria diferente em produção
 
@@ -366,6 +379,8 @@ Em produção, eu melhoraria principalmente:
 * pipeline de CI/CD
 * validação mais rígida das respostas externas
 
+
+
 ## Status do projeto
 
 Projeto desenvolvido como desafio fullstack + AI, com foco em:
@@ -378,5 +393,3 @@ Projeto desenvolvido como desafio fullstack + AI, com foco em:
 * organização de código
 * documentação técnica
 
-```
-```
