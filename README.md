@@ -154,42 +154,6 @@ curl "http://localhost:8080/forecast?city=Sao%20Paulo&days=3"
 
 
 
-## Rota interna do frontend
-
-O frontend usa a rota:
-
-```http
-POST /api/chat
-```
-
-Exemplo:
-
-```bash
-curl -i -X POST "http://localhost:3000/api/chat" \
-  -H "Content-Type: application/json" \
-  -d '{"message":"qual o clima atual em sao paulo"}'
-```
-
-Resposta de sucesso:
-
-```json
-{
-  "answer": "O clima atual em São Paulo é..."
-}
-```
-
-Resposta de erro:
-
-```json
-{
-  "error": true,
-  "code": "WEATHER_SERVICE_UNAVAILABLE",
-  "message": "Não foi possível consultar o serviço externo de clima no momento."
-}
-```
-
-
-
 ## Fluxo básico
 
 ```txt
